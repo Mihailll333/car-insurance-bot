@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: car-insurance-bot
+    runtime: python
+    buildCommand: ""
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: OPENAI_KEY
+        sync: false
+    autoDeploy: false
