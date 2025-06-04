@@ -48,7 +48,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     step = user_data.get(uid, {}).get("step")
 
     if step == "confirm_data":
-        if text == "да":
+        if text == "так":
             user_data[uid]["step"] = "price"
             await update.message.reply_text("💵 Вартість страховки - 100 USD. Вас влаштовує? (так/ні)")
         elif text == "нет":
