@@ -59,23 +59,23 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif step == "price":
         if text == "да":
             user_data[uid]["step"] = "done"
-            policy = generate_dummy_policy(user_data[uid]["data"])
+            policy = await generate_dummy_policy(user_data[uid]["data"])
             await update.message.reply_text(f"📄 Вот ваша страховка:\n\n{policy}")
         elif text == "нет":
             await update.message.reply_text("Извините, цена фиксирована — 100 USD.")
         else:
             await update.message.reply_text("Пожалуйста, ответь 'да' или 'нет'.")
 
-def generate_dummy_policy(data: dict) -> str:
+async def generate_dummy_policy(data: dict) -> str:
     summary = "\n".join(f"{k}: {v}" for k, v in data.items())
     prompt = (
         f"Создай шаблон страхового полиса на основании следующих данных:\n{summary}\n"
         "Полис должен быть коротким, но официальным."
     )
 
-    client = openai.OpenAI(api_key=os.getenv("OPENAI_KEY"))
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # ← вот сюда
+    client = openai.AsyncOpenAI(api_key=os.getenv("OPENAI_KEY"))
+    response = await client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
     )
     return response.choices[0].message.content.strip()
